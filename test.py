@@ -59,7 +59,7 @@ class Graph:
     def read_main(self, filename):
         with open(filename, "r", encoding="utf-8") as file:
             arr = file.readlines()
-            print(arr)
+            # print(arr)
             self.level = 0
             self.recursive_file_read(arr)
 
@@ -68,7 +68,7 @@ class Graph:
             return
 
         self.name = arr[0].strip()
-        print(self.name, self.level)
+        # print(self.name, self.level)
         arr.pop(0)
         # print('start of:', self.name)
 
@@ -362,9 +362,15 @@ class MyApp(ctk.CTk):
             row.grid_columnconfigure(0, weight=1)
 
             for j, elem in enumerate(level):
+                unit = graph.get_member_by_name(elem)
+                adder: str = ''
+                if unit == None:
+                    adder = str(graph.final_vector[0,j])[:4]
+                else: adder = str(unit.znachimost)[:4]
+                print(unit, elem, adder)
                 vertex = ctk.CTkButton(
                     row,
-                    text=elem + '\n'+ str(graph.get_param_of_member_by_name(elem, 'znachimost'))[:4],
+                    text=elem + '\n'+ adder,
                     text_color="#fff",
                     anchor="center",  # Center text
                     height=70,
@@ -395,12 +401,7 @@ class MyApp(ctk.CTk):
                         for elem in vertexes[i+1]:
                             # print(sub, elem._text)
                             if elem._text.split()[0] == sub:
-                                print(vertexes[i][j]._text, unit.sub_names)
-                                print(vertexes[i][j].winfo_rootx() + vertexes[i][j].winfo_width() // 2,
-                                    vertexes[i][j].winfo_rooty() + vertexes[i][j].winfo_height() // 2,
-
-                                    elem.winfo_rootx() + elem.winfo_width() // 2,
-                                    elem.winfo_rooty() + elem.winfo_height() // 2)
+           
                                 canvas.create_line(
                                     vertexes[i][j].winfo_rootx() + vertexes[i][j].winfo_width() // 2,
                                     vertexes[i][j].winfo_rooty(),
@@ -455,7 +456,7 @@ if __name__ == "__main__":
 
     test.calculate_final_matrix()
     test.init_znachimost()
-    # test.display_fin()
+    test.display_fin()
 
     # print(f"\ndef find by name:")
     # unit = test.graph.get_member_by_name("Цена_Земли")
