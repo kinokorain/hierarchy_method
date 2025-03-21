@@ -367,7 +367,8 @@ class MyApp(ctk.CTk):
                 row.grid_columnconfigure(j, weight=1)
                 vertexes[i].append(vertex)
         # print(vertexes)
-
+   
+   
         for i in range(len(vertexes)):
             for j in range(len(vertexes[i])):
                 # vertexes[i][j].fg_color = '#100'
