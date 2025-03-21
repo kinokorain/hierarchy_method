@@ -15,6 +15,8 @@ class Graph:
         self.level: int = -1
 
         self.base_criteries = np.zeros((0, 0))  # отношение критериев
+
+        self.mean_vector = np.zeros((0,0))
         self.final_vector = np.zeros(
             (0, 0)
         )  # средние по каждой из таблиц. В главной = ответ
@@ -121,7 +123,7 @@ class Graph:
         size: int = len(self.adj_list)
 
         self.final_vector = self.calculate_mean()
-
+        self.mean_vector = np.copy(self.final_vector)
         for i in range(0, size):
             self.adj_list[i].calculate_mean_forall()
 
@@ -335,7 +337,7 @@ class MyApp(ctk.CTk):
         self.displayGraph(left_frame, graph, 0)
 
         right_frame = ctk.CTkFrame(paned_window, fg_color="gray30")
-        paned_window.add(right_frame, minsize=300)
+        paned_window.add(right_frame, minsize=100)
 
         TabView(right_frame)
 
@@ -344,7 +346,7 @@ class MyApp(ctk.CTk):
         print("in displayGraph")
 
         canvas = tk.Canvas(parent, bg="#222", highlightthickness=0)
-        canvas.pack(fill="both", expand=True)
+        canvas.pack(fill='both', expand=True)
 
 
         sub_levels = graph.construct_subs_by_level()
@@ -362,7 +364,7 @@ class MyApp(ctk.CTk):
             for j, elem in enumerate(level):
                 vertex = ctk.CTkButton(
                     row,
-                    text=elem,
+                    text=elem + '\n'+ str(graph.get_param_of_member_by_name(elem, 'znachimost'))[:4],
                     text_color="#fff",
                     anchor="center",  # Center text
                     height=70,
@@ -373,16 +375,15 @@ class MyApp(ctk.CTk):
 
                 # Make each button expand proportionally
                 row.grid_columnconfigure(j, weight=1)
-                canvas.update_idletasks()
                 vertexes[i].append(vertex)
         # print(vertexes)
    
    
-
+        canvas.update_idletasks()
         for i in range(len(vertexes)):
             for j in range(len(vertexes[i])):
                 # vertexes[i][j].fg_color = '#100'
-                unit = graph.get_member_by_name(vertexes[i][j]._text)
+                unit = graph.get_member_by_name(vertexes[i][j]._text.split()[0])
                 if unit == None:
                     continue
                 if len(unit.sub_names) > 0:
@@ -393,7 +394,7 @@ class MyApp(ctk.CTk):
                         
                         for elem in vertexes[i+1]:
                             # print(sub, elem._text)
-                            if elem._text == sub:
+                            if elem._text.split()[0] == sub:
                                 print(vertexes[i][j]._text, unit.sub_names)
                                 print(vertexes[i][j].winfo_rootx() + vertexes[i][j].winfo_width() // 2,
                                     vertexes[i][j].winfo_rooty() + vertexes[i][j].winfo_height() // 2,
@@ -402,10 +403,10 @@ class MyApp(ctk.CTk):
                                     elem.winfo_rooty() + elem.winfo_height() // 2)
                                 canvas.create_line(
                                     vertexes[i][j].winfo_rootx() + vertexes[i][j].winfo_width() // 2,
-                                    vertexes[i][j].winfo_rooty() + vertexes[i][j].winfo_height() // 2,
+                                    vertexes[i][j].winfo_rooty(),
 
                                     elem.winfo_rootx() + elem.winfo_width() // 2,
-                                    elem.winfo_rooty() + elem.winfo_height() // 2,
+                                    elem.winfo_rooty(),
                                     fill = 'white', width = 3
                                 )
 
@@ -446,14 +447,14 @@ if __name__ == "__main__":
     test = Graph()
     test.read_main("k2.txt")
 
-    # test.calculate_mean_forall()
+    test.calculate_mean_forall()
     # if not test.graph.is_matrix_correct():
     #     print("matrix incorrect")
 
     # test.display_fin()
 
-    # test.calculate_final_matrix()
-
+    test.calculate_final_matrix()
+    test.init_znachimost()
     # test.display_fin()
 
     # print(f"\ndef find by name:")
