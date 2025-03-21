@@ -343,6 +343,7 @@ class MyApp(ctk.CTk):
 
         print("in displayGraph")
         sub_levels = graph.construct_subs_by_level()
+        sub_levels.append(graph.get_alts())
         vertexes = [[] for i in range(len(sub_levels))]
         print(vertexes)
 
@@ -364,6 +365,7 @@ class MyApp(ctk.CTk):
                 # print(elem, graph.get_param_of_member_by_name(elem, "sub_names"))
                 vertex._text_label.configure(wraplength=100)
                 vertex.grid(row=0, column=j, sticky="ew", padx=5, pady=5)
+
                 # Make each button expand proportionally
                 row.grid_columnconfigure(j, weight=1)
                 vertexes[i].append(vertex)
@@ -375,16 +377,20 @@ class MyApp(ctk.CTk):
             for j in range(len(vertexes[i])):
                 # vertexes[i][j].fg_color = '#100'
                 unit = graph.get_member_by_name(vertexes[i][j]._text)
-
+                if unit == None:
+                    continue
                 if len(unit.adj_list) > 0:
                     # print(vertexes[i][j]._text)
                     lever = False
+                    
                     for sub in unit.sub_names:
+                        
                         for elem in vertexes[i+1]:
                             # print(sub, elem._text)
                             if elem._text == sub:
                                 print(vertexes[i][j]._text, unit.sub_names)
                                 elem._text_color = '#aaa'
+
                                 lever = True
                                 break
                             if lever: break
