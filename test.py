@@ -342,13 +342,18 @@ class MyApp(ctk.CTk):
     def displayGraph(self, parent, graph: Graph, index):
 
         print("in displayGraph")
+
+        canvas = tk.Canvas(parent, bg="#222", highlightthickness=0)
+        canvas.pack(fill="both", expand=True)
+
+
         sub_levels = graph.construct_subs_by_level()
         sub_levels.append(graph.get_alts())
         vertexes = [[] for i in range(len(sub_levels))]
         print(vertexes)
 
         for i, level in enumerate(sub_levels):
-            row = ctk.CTkFrame(parent, fg_color="#333")
+            row = ctk.CTkFrame(canvas, fg_color="#333")
             row.grid(row=i, column=0, padx=50, pady=50, sticky="ew")
 
             # Ensure the row stretches to fill the width of parent
@@ -368,6 +373,7 @@ class MyApp(ctk.CTk):
 
                 # Make each button expand proportionally
                 row.grid_columnconfigure(j, weight=1)
+                canvas.update_idletasks()
                 vertexes[i].append(vertex)
         # print(vertexes)
    
@@ -379,7 +385,7 @@ class MyApp(ctk.CTk):
                 unit = graph.get_member_by_name(vertexes[i][j]._text)
                 if unit == None:
                     continue
-                if len(unit.adj_list) > 0:
+                if len(unit.sub_names) > 0:
                     # print(vertexes[i][j]._text)
                     lever = False
                     
@@ -389,11 +395,25 @@ class MyApp(ctk.CTk):
                             # print(sub, elem._text)
                             if elem._text == sub:
                                 print(vertexes[i][j]._text, unit.sub_names)
-                                elem._text_color = '#aaa'
+                                print(vertexes[i][j].winfo_rootx() + vertexes[i][j].winfo_width() // 2,
+                                    vertexes[i][j].winfo_rooty() + vertexes[i][j].winfo_height() // 2,
+
+                                    elem.winfo_rootx() + elem.winfo_width() // 2,
+                                    elem.winfo_rooty() + elem.winfo_height() // 2)
+                                canvas.create_line(
+                                    vertexes[i][j].winfo_rootx() + vertexes[i][j].winfo_width() // 2,
+                                    vertexes[i][j].winfo_rooty() + vertexes[i][j].winfo_height() // 2,
+
+                                    elem.winfo_rootx() + elem.winfo_width() // 2,
+                                    elem.winfo_rooty() + elem.winfo_height() // 2,
+                                    fill = 'white', width = 3
+                                )
+
+
 
                                 lever = True
                                 break
-                            if lever: break
+                            # if lever: break
 
 
         # Ensure the parent expands to accommodate the full width
