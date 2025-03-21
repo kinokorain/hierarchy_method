@@ -340,6 +340,7 @@ class MyApp(ctk.CTk):
         TabView(right_frame)
 
     def displayGraph(self, parent, graph: Graph, index):
+
         print("in displayGraph")
         sub_levels = graph.construct_subs_by_level()
         vertexes = [[] for i in range(len(sub_levels))]
