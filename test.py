@@ -369,6 +369,7 @@ class MyApp(ctk.CTk):
         # print(vertexes)
    
    
+
         for i in range(len(vertexes)):
             for j in range(len(vertexes[i])):
                 # vertexes[i][j].fg_color = '#100'
