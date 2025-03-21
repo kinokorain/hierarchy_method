@@ -58,6 +58,7 @@ class Graph:
         self.sub_names = arr[0].strip().split()
         arr.pop(0)
 
+
         if self.sub_names[0] != "@":
             self.init_edges(self.sub_names)
 
