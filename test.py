@@ -355,22 +355,37 @@ class MyApp(ctk.CTk):
             for j, elem in enumerate(level):
                 vertex = ctk.CTkButton(
                     row,
-                    text=elem.replace("_", " ") + str(i),
+                    text=elem,
                     text_color="#fff",
                     anchor="center",  # Center text
                     height=70,
                 )
-                print(elem, graph.get_param_of_member_by_name(elem, "sub_names"))
+                # print(elem, graph.get_param_of_member_by_name(elem, "sub_names"))
                 vertex._text_label.configure(wraplength=100)
                 vertex.grid(row=0, column=j, sticky="ew", padx=5, pady=5)
                 # Make each button expand proportionally
                 row.grid_columnconfigure(j, weight=1)
                 vertexes[i].append(vertex)
-        print(vertexes)
+        # print(vertexes)
 
-        for kek in vertexes:
-            for elem in kek:
-                print(elem._text)
+        for i in range(len(vertexes)):
+            for j in range(len(vertexes[i])):
+                # vertexes[i][j].fg_color = '#100'
+                unit = graph.get_member_by_name(vertexes[i][j]._text)
+
+                if len(unit.adj_list) > 0:
+                    # print(vertexes[i][j]._text)
+                    lever = False
+                    for sub in unit.sub_names:
+                        for elem in vertexes[i+1]:
+                            # print(sub, elem._text)
+                            if elem._text == sub:
+                                print(vertexes[i][j]._text, unit.sub_names)
+                                elem._text_color = '#aaa'
+                                lever = True
+                                break
+                            if lever: break
+
 
         # Ensure the parent expands to accommodate the full width
         parent.grid_columnconfigure(0, weight=1)
